@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 import nl.saxion.gameapp.GameApp;
 import nl.saxion.gameapp.screens.ScalableGameScreen;
 
+import static nl.saxion.gameapp.GameApp.isKeyJustPressed;
+
 public class MainMenuScreen extends ScalableGameScreen {
     public MainMenuScreen() {
         super(1280, 720);
@@ -19,8 +21,8 @@ public class MainMenuScreen extends ScalableGameScreen {
         super.render(delta);
 
         // When the user presses enter, go to the next screen
-        if (GameApp.isKeyJustPressed(Input.Keys.ENTER)) {
-            GameApp.switchScreen("YourGameScreen");
+        if (isKeyJustPressed(Input.Keys.ENTER)) {
+            GameApp.switchScreen("Playfield");
         }
 
         // Render the main menu
