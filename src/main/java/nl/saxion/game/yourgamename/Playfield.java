@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Playfield extends ScalableGameScreen {
     Player player;
     float size = 20;
+    Zombie zombie;
     float height = 20;
     ArrayList<Zombie> zombies = new ArrayList<>();
     private float elapsedTime = 0f;
@@ -54,7 +55,22 @@ public class Playfield extends ScalableGameScreen {
 
         for (Zombie zombie : zombies) {
             GameApp.drawCircle(zombie.x, zombie.y, 20);
+            float playerCenterX = player.x + size / 2;
+            float playerCenterY = player.y + height / 2;
+
+            float dx = zombie.x - playerCenterX;
+            float dy = zombie.y - playerCenterY;
+            float distance = (float) Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 20 + Math.max(size, height) / 2) {
+                player.isDead = true;
+            }
         }
+        if (player.isDead) {
+            GameApp.clearScreen();
+            return;
+        }
+
 
         GameApp.endShapeRendering();
 
