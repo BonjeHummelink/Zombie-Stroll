@@ -35,7 +35,7 @@ public class MainMenuScreen extends ScalableGameScreen {
             GameApp.drawTextCentered("basic", "START", getWorldWidth() / 2, getWorldHeight() / 2, "white");
         } else {
             GameApp.drawTextCentered("basic", "START", getWorldWidth()/2, getWorldHeight()/2, "yellow-500");
-        }
+        }//ee
 
         if (SelectedItem == 1) {
             GameApp.drawTextCentered("basic", "QUIT", getWorldWidth()/2, getWorldHeight()/2 - 150, "white");
