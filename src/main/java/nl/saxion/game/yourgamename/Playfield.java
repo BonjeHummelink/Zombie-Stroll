@@ -9,11 +9,12 @@ import java.util.ArrayList;
 public class Playfield extends ScalableGameScreen {
     Player player;
     float size = 20;
-    Zombie zombie;
+    int cameraSpeed = 50;
+    float makeItHarder = 120f;
     float height = 20;
     ArrayList<Zombie> zombies = new ArrayList<>();
     private float elapsedTime = 0f;
-    private float spawnInterval = 2f;
+    private float spawnInterval = 0.5f;
 
 
     public Playfield(int worldWidth, int worldHeight) {
@@ -62,12 +63,23 @@ public class Playfield extends ScalableGameScreen {
             float dy = zombie.y - playerCenterY;
             float distance = (float) Math.sqrt(dx * dx + dy * dy);
 
+            if(distance>0){
+                zombie.x -= (dx / distance) * zombie.speed * delta;
+                zombie.y -= (dy / distance) * zombie.speed * delta;
+            }
+
             if (distance < 20 + Math.max(size, height) / 2) {
                 player.isDead = true;
             }
         }
+
+        for (Zombie zombie : zombies) {
+            zombie.y -= cameraSpeed * delta;
+        }
+
+        zombies.removeIf(zombie -> zombie.y < -50);
         if (player.isDead) {
-            GameApp.clearScreen();
+            GameApp.switchScreen("MainMenuScreen");
             return;
         }
 
@@ -77,8 +89,8 @@ public class Playfield extends ScalableGameScreen {
         if (elapsedTime >= spawnInterval) {
             zombieSpawner();
             elapsedTime = 0f;
+            spawnInterval = 0.5f;
         }
-        spawnInterval = 2f;
 
     }
 
@@ -88,7 +100,7 @@ public class Playfield extends ScalableGameScreen {
         Zombie zombie = new Zombie();
         zombie.x = x;
         zombie.y = y;
-        int side = (int) GameApp.random(0, 2);
+        int side = (int) GameApp.random(0, 3);
         switch(side) {
             case 0:
                 zombie.x = 0;
@@ -98,6 +110,9 @@ public class Playfield extends ScalableGameScreen {
                 zombie.x = getWorldWidth();
                 zombie.y = GameApp.random(0, getWorldHeight());
                 break;
+            case 2:
+                zombie.x = GameApp.random(0,getWorldWidth());
+                zombie.y = getWorldHeight();
         }
 
         zombies.add(zombie);

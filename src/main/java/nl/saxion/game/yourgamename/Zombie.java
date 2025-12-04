@@ -4,5 +4,5 @@ import nl.saxion.gameapp.GameApp;
 
 public class Zombie {
     float x, y;
-    float speed = 80;
+    float speed = 40;
 }
