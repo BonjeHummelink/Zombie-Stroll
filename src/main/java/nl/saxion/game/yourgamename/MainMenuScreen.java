@@ -7,18 +7,22 @@ import nl.saxion.gameapp.screens.ScalableGameScreen;
 import static nl.saxion.gameapp.GameApp.isKeyJustPressed;
 
 public class MainMenuScreen extends ScalableGameScreen {
+    int SelectedItem = 0;
     public MainMenuScreen() {
-        super(1280, 720);
+        super(500, 500);
     }
 
     @Override
-    public void show() {
-        GameApp.addFont("basic", "fonts/basic.ttf", 100);
+    public void show()
+    {
+        GameApp.addFont("basic", "fonts/basic.ttf", 60);
+        GameApp.addTexture("Background","textures/Background2.png" );
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+
 
         // When the user presses enter, go to the next screen
         if (isKeyJustPressed(Input.Keys.ENTER)) {
@@ -26,14 +30,28 @@ public class MainMenuScreen extends ScalableGameScreen {
         }
 
         // Render the main menu
-        GameApp.clearScreen("black");
+        GameApp.clearScreen("white");
         GameApp.startSpriteRendering();
-        GameApp.drawTextCentered("basic", "Start Game (press enter)", getWorldWidth()/2, getWorldHeight()/2, "amber-500");
+        GameApp.drawTexture("Background",0 ,0, GameApp.getWorldWidth(), getWorldHeight());
+        if (SelectedItem == 0) {
+            GameApp.drawTextCentered("basic", "START", getWorldWidth() / 2, getWorldHeight() / 2, "white");
+        } else {
+            GameApp.drawTextCentered("basic", "START", getWorldWidth()/2, getWorldHeight()/2, "yellow-500");
+        }//ee
+
+        if (SelectedItem == 1) {
+            GameApp.drawTextCentered("basic", "QUIT", getWorldWidth()/2, getWorldHeight()/2 - 150, "white");
+
+        }else {
+            GameApp.drawTextCentered("basic", "QUIT", getWorldWidth()/2, getWorldHeight()/2 - 150, "yellow-500");
+
+        }
         GameApp.endSpriteRendering();
     }
 
     @Override
     public void hide() {
         GameApp.disposeFont("basic");
+        GameApp.disposeTexture("Background");
     }
 }
