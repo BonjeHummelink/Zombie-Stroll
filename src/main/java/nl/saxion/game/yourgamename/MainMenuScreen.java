@@ -23,7 +23,23 @@ public class MainMenuScreen extends ScalableGameScreen {
     public void render(float delta) {
         super.render(delta);
 
+        if(isKeyJustPressed(Input.Keys.DOWN)) {
+            SelectedItem = (SelectedItem + 1) % 2;
+        } else if (isKeyJustPressed(Input.Keys.UP)) {
+            SelectedItem = SelectedItem - 1;
+            if (SelectedItem < 0) {
+                SelectedItem = 1;
+            }
+        }
 
+
+        if(GameApp.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (SelectedItem == 1) {
+                GameApp.switchScreen("Playfield");
+            } else {
+                GameApp.quit();
+            }
+        }
 
 
         // When the user presses enter, go to the next screen
