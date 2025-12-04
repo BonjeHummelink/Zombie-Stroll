@@ -16,12 +16,14 @@ public class MainMenuScreen extends ScalableGameScreen {
     public void show()
     {
         GameApp.addFont("basic", "fonts/basic.ttf", 60);
-        GameApp.addTexture("Background","textures/Background2.png" );
+        GameApp.addTexture("Background","Images/Background2.png" );
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+
+
 
 
         // When the user presses enter, go to the next screen
@@ -37,7 +39,7 @@ public class MainMenuScreen extends ScalableGameScreen {
             GameApp.drawTextCentered("basic", "START", getWorldWidth() / 2, getWorldHeight() / 2, "white");
         } else {
             GameApp.drawTextCentered("basic", "START", getWorldWidth()/2, getWorldHeight()/2, "yellow-500");
-        }//ee
+        }
 
         if (SelectedItem == 1) {
             GameApp.drawTextCentered("basic", "QUIT", getWorldWidth()/2, getWorldHeight()/2 - 150, "white");
