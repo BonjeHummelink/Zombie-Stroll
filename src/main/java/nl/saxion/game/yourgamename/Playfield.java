@@ -37,10 +37,12 @@ public class Playfield extends ScalableGameScreen {
         player.x = getWorldWidth() / 2;
         player.y = 0;
         survivalTime = 0f;
+        GameApp.addMusic("bg-music", "audio/retro-arcade-game-music-297305 (1).mp3");
         GameApp.addFont("basic", "fonts/basic.ttf", 60);
         GameApp.addFont("scoreboardTitle", "fonts/basic.ttf", 16);
         GameApp.addFont("scoreboard", "fonts/basic.ttf", 18);
         GameApp.addFont("scoreboardSmall", "fonts/basic.ttf", 14);
+        GameApp.playMusic("bg-music", true);
     }
 
     @Override
@@ -287,8 +289,10 @@ public class Playfield extends ScalableGameScreen {
 
     @Override
     public void hide() {
+        GameApp.stopAllAudio();
         GameApp.disposeFont("scoreboard");
         GameApp.disposeFont("scoreboardTitle");
         GameApp.disposeFont("scoreboardSmall");
+        GameApp.disposeMusic("bg-music");
     }
 }
