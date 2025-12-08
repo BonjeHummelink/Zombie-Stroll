@@ -24,6 +24,9 @@ public class Playfield extends ScalableGameScreen {
     private float speedBoostTimer = 0f;
     private float invincibilityTimer = 0f;
 
+    // Scoreboard variable
+    private float survivalTime = 0f;
+
     public Playfield(int worldWidth, int worldHeight) {
         super(worldWidth, worldHeight);
     }
@@ -33,7 +36,11 @@ public class Playfield extends ScalableGameScreen {
         player = new Player();
         player.x = getWorldWidth() / 2;
         player.y = 0;
+        survivalTime = 0f;
         GameApp.addFont("basic", "fonts/basic.ttf", 60);
+        GameApp.addFont("scoreboardTitle", "fonts/basic.ttf", 16);
+        GameApp.addFont("scoreboard", "fonts/basic.ttf", 18);
+        GameApp.addFont("scoreboardSmall", "fonts/basic.ttf", 14);
     }
 
     @Override
@@ -41,6 +48,7 @@ public class Playfield extends ScalableGameScreen {
         super.render(delta);
         elapsedTime += delta;
         powerupSpawnTimer += delta;
+        survivalTime += delta;
 
         // Update powerup timers
         if (speedBoostTimer > 0) speedBoostTimer -= delta;
@@ -115,6 +123,9 @@ public class Playfield extends ScalableGameScreen {
 
         GameApp.endShapeRendering();
 
+        // --- DRAW SCOREBOARD ---
+        drawZombieScoreboard();
+
         // Move zombies with camera
         for (Zombie zombie : zombies) {
             zombie.y -= cameraSpeed * delta;
@@ -166,6 +177,61 @@ public class Playfield extends ScalableGameScreen {
             powerupSpawnTimer = 0f;
             powerupSpawnInterval = GameApp.random(4f, 8f);
         }
+    }
+
+    private void drawZombieScoreboard() {
+        float boardWidth = 160;
+        float boardHeight = 100;
+        float boardX = getWorldWidth() - boardWidth - 15;
+        float boardY = getWorldHeight() - boardHeight - 15;
+
+        // Draw shapes for scoreboard
+        GameApp.startShapeRenderingFilled();
+
+        // Draw thick border (blood red)
+        GameApp.setColor(139, 0, 0, 255);
+        GameApp.drawRect(boardX - 3, boardY - 3, boardWidth + 6, boardHeight + 6);
+        GameApp.setColor(220, 20, 60, 255);
+        GameApp.drawRect(boardX - 2, boardY - 2, boardWidth + 4, boardHeight + 4);
+
+        // Draw background panel (dark zombie green)
+        GameApp.setColor(15, 30, 15, 240);
+        GameApp.drawRect(boardX, boardY, boardWidth, boardHeight);
+
+        // Draw skull decorations
+        GameApp.setColor(230, 230, 200, 255);
+        GameApp.drawCircle(boardX + 15, boardY + boardHeight - 12, 8);
+        GameApp.drawCircle(boardX + boardWidth - 15, boardY + boardHeight - 12, 8);
+
+        // Draw blood splatters
+        GameApp.setColor(139, 0, 0, 180);
+        GameApp.drawCircle(boardX + 15, boardY + 15, 4);
+        GameApp.drawCircle(boardX + boardWidth - 20, boardY + 18, 5);
+
+        GameApp.endShapeRendering();
+
+        // Draw text
+        GameApp.startSpriteRendering();
+
+        GameApp.drawText("scoreboardTitle", "ZOMBIE SURVIVAL", boardX + boardWidth / 2 - 65, boardY + boardHeight - 20, "red-600");
+
+        // Score
+        GameApp.drawText("scoreboard", "Score: " + score, boardX + 15, boardY + boardHeight - 45, "yellow-400");
+
+        // Time
+        int minutes = (int)(survivalTime / 60);
+        int seconds = (int)(survivalTime % 60);
+        String timeStr = String.format("Time: %d:%02d", minutes, seconds);
+        GameApp.drawText("scoreboardSmall", timeStr, boardX + 15, boardY + boardHeight - 70, "lime-400");
+
+        // Active powerup indicator
+        if (invincibilityTimer > 0) {
+            GameApp.drawText("scoreboardSmall", "INVINCIBLE!", boardX + 15, boardY + boardHeight - 90, "cyan-400");
+        } else if (speedBoostTimer > 0) {
+            GameApp.drawText("scoreboardSmall", "SPEED BOOST!", boardX + 15, boardY + boardHeight - 90, "yellow-300");
+        }
+
+        GameApp.endSpriteRendering();
     }
 
     public void zombieSpawner() {
@@ -220,5 +286,9 @@ public class Playfield extends ScalableGameScreen {
     }
 
     @Override
-    public void hide() { }
+    public void hide() {
+        GameApp.disposeFont("scoreboard");
+        GameApp.disposeFont("scoreboardTitle");
+        GameApp.disposeFont("scoreboardSmall");
+    }
 }
