@@ -14,7 +14,7 @@ public class Playfield extends ScalableGameScreen {
     float height = 20;
     ArrayList<Zombie> zombies = new ArrayList<>();
     ArrayList<Powerup> powerups = new ArrayList<>();
-
+    float gettingHarder = 1f;
     private float elapsedTime = 0f;
     private float spawnInterval = 0.5f;
     private float powerupSpawnTimer = 0f;
@@ -155,8 +155,10 @@ public class Playfield extends ScalableGameScreen {
         if (elapsedTime >= spawnInterval) {
             zombieSpawner();
             elapsedTime = 0f;
-            spawnInterval = 0.5f;
+            if (gettingHarder==0)
+                spawnInterval = spawnInterval - 0.3f;
         }
+
 
         // Spawn powerups
         if (powerupSpawnTimer >= powerupSpawnInterval) {
@@ -164,8 +166,6 @@ public class Playfield extends ScalableGameScreen {
             powerupSpawnTimer = 0f;
             powerupSpawnInterval = GameApp.random(4f, 8f);
         }
-
-        // Draw UI text
     }
 
     public void zombieSpawner() {
